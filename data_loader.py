@@ -4,7 +4,6 @@ import json
 import logging
 
 import numpy as np
-
 import torch
 from torch.utils.data import TensorDataset
 
@@ -62,19 +61,28 @@ class NaverNerProcessor(object):
         self.labels_lst = get_labels(args)
 
     @classmethod
-    def _read_file(cls, input_file):
-        """Read tsv file, and return words and label as list"""
+    def _read_file(cls, input_file, quotechar=None):
+        """Reads a file where each line contain a json dict corresponding to an example."""
         with open(input_file, "r", encoding="utf-8") as f:
-            lines = []
+            all_words = []
+            all_tags = []
             for line in f:
-                lines.append(line.strip())
-            return lines
+                line = json.loads(line)
+                words = line["words"]
+                words = [word.strip() for word in words]
+                words = ' '.join(words)
+                tags = line["tags"]
+                tags = [tag.strip() for tag in tags]
+                tags = ' '.join(tags)
+                all_words.append(words)
+                all_tags.append(tags)
+            return all_words, all_tags
 
     def _create_examples(self, dataset, set_type):
         """Creates examples for the training and dev sets."""
         examples = []
         for (i, data) in enumerate(dataset):
-            words, labels = data.split('\t')
+            words, labels = data
             words = words.split()
             labels = labels.split()
             guid = "%s-%s" % (set_type, i)
@@ -99,8 +107,10 @@ class NaverNerProcessor(object):
         elif mode == 'test':
             file_to_read = self.args.test_file
 
-        logger.info("LOOKING AT {}".format(os.path.join(self.args.data_dir, file_to_read)))
-        return self._create_examples(self._read_file(os.path.join(self.args.data_dir, file_to_read)), mode)
+        data_path = os.path.join(self.args.data_dir, file_to_read)
+        logger.info("LOOKING AT {}".format(data_path))
+        texts, slots = self._read_file(data_path)
+        return self._create_examples((texts, slots), mode)
 
 
 def load_word_matrix(args, word_vocab):

@@ -28,16 +28,16 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--data_dir", default="./data", type=str, help="The input data dir")
+    parser.add_argument("--data_dir", default="./PhoNER_COVID19/data/word", type=str, help="The input data dir")
     parser.add_argument("--model_dir", default="./model", type=str, help="Path for saving model")
     parser.add_argument("--wordvec_dir", default="./wordvec", type=str, help="Path for pretrained word vector")
     parser.add_argument("--vocab_dir", default="./vocab", type=str)
     parser.add_argument("--pred_dir", default="./preds", type=str, help="The prediction file dir")
 
-    parser.add_argument("--train_file", default="train.tsv", type=str, help="Train file")
-    parser.add_argument("--test_file", default="test.tsv", type=str, help="Test file")
-    parser.add_argument("--label_file", default="label.txt", type=str, help="Label file")
-    parser.add_argument("--w2v_file", default="word_vector_300d.vec", type=str, help="Pretrained word vector file")
+    parser.add_argument("--train_file", default="train_word.json", type=str, help="Train file")
+    parser.add_argument("--test_file", default="test_word.json", type=str, help="Test file")
+    parser.add_argument("--label_file", default="slot_label.txt", type=str, help="Label file")
+    parser.add_argument("--w2v_file", default="word2vec_vi_words_300dims.txt", type=str, help="Pretrained word vector file")
     parser.add_argument("--write_pred", action="store_true", help="Write prediction during evaluation")
 
     parser.add_argument("--max_seq_len", default=50, type=int, help="Max sentence length")

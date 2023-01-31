@@ -2,8 +2,11 @@ import os
 import random
 import logging
 from collections import Counter
+import json
+import zipfile
 
-import gdown
+# import gdown
+import wget
 import torch
 import numpy as np
 from seqeval.metrics import precision_score, recall_score, f1_score, classification_report
@@ -15,13 +18,72 @@ def get_test_texts(args):
     texts = []
     with open(os.path.join(args.data_dir, args.test_file), 'r', encoding='utf-8') as f:
         for line in f:
-            text, _ = line.split('\t')
-            text = text.split()
+            line = json.loads(line)
+            text = line["words"]
+            # text, _ = line.split('\t')
+            # text = text.split()
             texts.append(text)
 
     return texts
 
 
+# def build_vocab(args):
+#     """
+#     Build vocab from train set
+#     Write all the tokens in vocab. When loading the vocab, limit the size of vocab at that time
+#     """
+#     # Read all the files
+#     total_words, total_chars = [], []
+
+#     with open(os.path.join(args.data_dir, args.train_file), 'r', encoding='utf-8') as f:
+#         for line in f:
+#             words, _ = line.split('\t')
+#             words = words.split()
+#             for word in words:
+#                 for char in word:
+#                     total_chars.append(char)
+#             total_words.extend(words)
+
+#     if not os.path.exists(args.vocab_dir):
+#         os.mkdir(args.vocab_dir)
+
+#     word_vocab, char_vocab = [], []
+
+#     word_vocab_path = os.path.join(args.vocab_dir, "word_vocab")
+#     char_vocab_path = os.path.join(args.vocab_dir, "char_vocab")
+
+#     word_counts = Counter(total_words)
+#     word_vocab.append("PAD")
+#     word_vocab.append("UNK")
+#     word_vocab.extend([x[0] for x in word_counts.most_common()])
+#     logger.info("Total word vocabulary size: {}".format(len(word_vocab)))
+
+#     with open(word_vocab_path, 'w', encoding='utf-8') as f:
+#         for word in word_vocab:
+#             f.write(word + "\n")
+
+#     char_counts = Counter(total_chars)
+#     char_vocab.append("PAD")
+#     char_vocab.append("UNK")
+#     char_vocab.extend([x[0] for x in char_counts.most_common()])
+#     logger.info("Total char vocabulary size: {}".format(len(char_vocab)))
+
+#     with open(char_vocab_path, 'w', encoding='utf-8') as f:
+#         for char in char_vocab:
+#             f.write(char + "\n")
+
+#     # Set the exact vocab size
+#     # If the original vocab size is smaller than args.vocab_size, then set args.vocab_size to original one
+#     with open(word_vocab_path, 'r', encoding='utf-8') as f:
+#         word_lines = f.readlines()
+#         args.word_vocab_size = min(len(word_lines), args.word_vocab_size)
+
+#     with open(char_vocab_path, 'r', encoding='utf-8') as f:
+#         char_lines = f.readlines()
+#         args.char_vocab_size = min(len(char_lines), args.char_vocab_size)
+
+#     logger.info("args.word_vocab_size: {}".format(args.word_vocab_size))
+#     logger.info("args.char_vocab_size: {}".format(args.char_vocab_size))
 def build_vocab(args):
     """
     Build vocab from train set
@@ -32,8 +94,8 @@ def build_vocab(args):
 
     with open(os.path.join(args.data_dir, args.train_file), 'r', encoding='utf-8') as f:
         for line in f:
-            words, _ = line.split('\t')
-            words = words.split()
+            line = json.loads(line)
+            words = line["words"]
             for word in words:
                 for char in word:
                     total_chars.append(char)
@@ -128,9 +190,15 @@ def download_w2v(args):
     # Pretrained word vectors
     if not os.path.exists(w2v_path):
         logger.info("Downloading pretrained word vectors...")
-        gdown.download("https://drive.google.com/uc?id=1YX7yHm5MHZ-Icdm1ZX4X9_wD7UrXexJ-", w2v_path, quiet=False)
+        # gdown.download("https://drive.google.com/uc?id=1YX7yHm5MHZ-Icdm1ZX4X9_wD7UrXexJ-", w2v_path, quiet=False)
+        wget.download("https://public.vinai.io/word2vec_vi_words_300dims.zip", "wordvec/word2vec_vi_words_300dims.zip")
+        # os.system("$unzip wordvec/word2vec_vi_words_100dims.zip")
+        with zipfile.ZipFile("wordvec/word2vec_vi_words_300dims.zip", 'r') as zip_ref:
+            zip_ref.extractall("wordvec")   
 
 
+# def get_labels(args):
+#     return [label.strip() for label in open(os.path.join(args.data_dir, args.label_file), 'r', encoding='utf-8')]
 def get_labels(args):
     return [label.strip() for label in open(os.path.join(args.data_dir, args.label_file), 'r', encoding='utf-8')]
 

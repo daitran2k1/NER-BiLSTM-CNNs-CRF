@@ -1,0 +1,1 @@
+python3 main.py --do_train --do_eval
