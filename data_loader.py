@@ -81,8 +81,9 @@ class NaverNerProcessor(object):
     def _create_examples(self, dataset, set_type):
         """Creates examples for the training and dev sets."""
         examples = []
-        for (i, data) in enumerate(dataset):
-            words, labels = data
+        all_words, all_labels = dataset
+        for i, (words, labels) in enumerate(zip(all_words, all_labels)):
+            data = words + '\t' + labels
             words = words.split()
             labels = labels.split()
             guid = "%s-%s" % (set_type, i)
