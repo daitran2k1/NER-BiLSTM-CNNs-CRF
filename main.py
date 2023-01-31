@@ -62,8 +62,8 @@ if __name__ == '__main__':
     parser.add_argument("--ignore_index", default=0, type=int,
                         help='Specifies a target value that is ignored and does not contribute to the input gradient')
 
-    parser.add_argument('--logging_steps', type=int, default=1200, help="Log every X updates steps.")
-    parser.add_argument('--save_steps', type=int, default=1200, help="Save checkpoint every X updates steps.")
+    parser.add_argument('--logging_steps', type=int, default=400, help="Log every X updates steps.")
+    parser.add_argument('--save_steps', type=int, default=400, help="Save checkpoint every X updates steps.")
 
     parser.add_argument("--do_train", action="store_true", help="Whether to run training.")
     parser.add_argument("--do_eval", action="store_true", help="Whether to run eval on the test set.")
