@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument("--train_file", default="train_word.json", type=str, help="Train file")
     parser.add_argument("--test_file", default="test_word.json", type=str, help="Test file")
     parser.add_argument("--label_file", default="slot_label.txt", type=str, help="Label file")
-    parser.add_argument("--w2v_file", default="word2vec_vi_words_300dims.txt", type=str, help="Pretrained word vector file")
+    parser.add_argument("--w2v_file", default="word2vec_vi_words_100dims.txt", type=str, help="Pretrained word vector file")
     parser.add_argument("--write_pred", action="store_true", help="Write prediction during evaluation")
 
     parser.add_argument("--max_seq_len", default=50, type=int, help="Max sentence length")
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     parser.add_argument("--word_vocab_size", default=100000, type=int, help="Maximum size of word vocabulary")
     parser.add_argument("--char_vocab_size", default=1000, type=int, help="Maximum size of character vocabulary")
 
-    parser.add_argument("--word_emb_dim", default=300, type=int, help="Word embedding size")
+    parser.add_argument("--word_emb_dim", default=100, type=int, help="Word embedding size")
     parser.add_argument("--char_emb_dim", default=30, type=int, help="Character embedding size")
     parser.add_argument("--final_char_dim", default=50, type=int, help="Dimension of character cnn output")
     parser.add_argument("--hidden_dim", default=350, type=int, help="Dimension of BiLSTM output")
