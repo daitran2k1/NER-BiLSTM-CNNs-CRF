@@ -1,3 +1,4 @@
 wordvec/word2vec_vi_words_300dims.zip
 wordvec/word2vec_vi_words_300dims.txt
 test.py
+results/
