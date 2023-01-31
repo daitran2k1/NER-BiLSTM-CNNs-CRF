@@ -191,6 +191,8 @@ def download_w2v(args):
     if not os.path.exists(w2v_path):
         logger.info("Downloading pretrained word vectors...")
         # gdown.download("https://drive.google.com/uc?id=1YX7yHm5MHZ-Icdm1ZX4X9_wD7UrXexJ-", w2v_path, quiet=False)
+        if not os.path.exists(args.wordvec_dir):
+            os.mkdir(args.wordvec_dir)
         wget.download("https://public.vinai.io/word2vec_vi_words_300dims.zip", "wordvec/word2vec_vi_words_300dims.zip")
         # os.system("$unzip wordvec/word2vec_vi_words_100dims.zip")
         with zipfile.ZipFile("wordvec/word2vec_vi_words_300dims.zip", 'r') as zip_ref:
